@@ -1,47 +1,65 @@
-<!-- HTML for static distribution bundle build -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8">
-    <title>API Dcoumentation</title>
-    <link rel="stylesheet" type="text/css" href="./swagger-ui.css" />
-    <link rel="stylesheet" type="text/css" href="index.css" />
-    <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32" />
-    <link rel="icon" type="image/png" href="./favicon-16x16.png" sizes="16x16" />
-  </head>
-
-  <body>
-    <h2>Available APIs</h2>
-    <select id="apiSelector">
-        <option value="openapi.yaml">API 1</option>
-        <option value="openapi2.yaml">API 2</option>
-    </select>
-
-    <div id="swagger-ui"></div>
-
-    <script src="./swagger-ui-bundle.js" charset="UTF-8"></script>
-    <script src="./swagger-ui-standalone-preset.js" charset="UTF-8"></script>
-    <script>
-        function loadSwagger(apiUrl) {
-            window.ui = SwaggerUIBundle({
-                url: apiUrl,
-                dom_id: "#swagger-ui",
-                deepLinking: true,
-                presets: [
-                    SwaggerUIBundle.presets.apis,
-                    SwaggerUIStandalonePreset // This brings back the banner!
-                ],
-                layout: "StandaloneLayout" // Ensures the banner is visible
-            });
+    <title>API Documentation</title>
+    <script src="redoc.standalone.js"></script>
+    <style>
+        body {
+            display: flex;
+            margin: 0;
+            height: 100vh;
         }
+        #sidebar {
+            width: 250px;
+            background: #f4f4f4;
+            padding: 15px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+        #sidebar h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        #sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        #sidebar ul li {
+            margin: 10px 0;
+        }
+        #sidebar ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        #content {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
 
-        document.getElementById("apiSelector").addEventListener("change", function() {
-            loadSwagger(this.value);
-        });
+    <div id="sidebar">
+        <h2>Available APIs</h2>
+        <ul>
+            <li><a href="#" onclick="loadAPI('openapi.yaml')">API 1</a></li>
+            <li><a href="#" onclick="loadAPI('openapi2.yaml')">API 2</a></li>
+        </ul>
+    </div>
 
-        // Load the first API by default
-        loadSwagger("openapi.yaml");
+    <div id="content">
+        <redoc spec-url="openapi1.yaml"></redoc>
+    </div>
+
+    <script>
+        function loadAPI(apiUrl) {
+            document.getElementById('content').innerHTML = `<redoc spec-url="${apiUrl}"></redoc>`;
+            Redoc.init(apiUrl, {}, document.getElementById('content'));
+        }
     </script>
-</body>
 
+</body>
 </html>
