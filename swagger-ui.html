@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>API Documentation</title>
+    <link rel="stylesheet" type="text/css" href="./swagger-ui.css" />
+    <link rel="stylesheet" type="text/css" href="index.css" />
+    <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="./favicon-16x16.png" sizes="16x16" />
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Left Sidebar */
+        .sidebar {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            padding: 10px;
+            cursor: pointer;
+            background: #34495e;
+            margin-bottom: 5px;
+            text-align: center;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .sidebar ul li:hover {
+            background: #1abc9c;
+        }
+
+        /* Right API Display */
+        .content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        #swagger-ui {
+            background: white;
+            border-radius: 5px;
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <h2>Available APIs</h2>
+            <ul>
+                <li onclick="loadSwagger('openapi.yaml')">API 1</li>
+                <li onclick="loadSwagger('openapi2.yaml')">API 2</li>
+                <li onclick="loadSwagger('openapi3.yaml')">API 3</li>
+            </ul>
+        </div>
+
+        <!-- Swagger UI Content -->
+        <div class="content">
+            <div id="swagger-ui"></div>
+        </div>
+    </div>
+
+    <script src="./swagger-ui-bundle.js" charset="UTF-8"></script>
+    <script src="./swagger-ui-standalone-preset.js" charset="UTF-8"></script>
+    <script>
+        function loadSwagger(apiUrl) {
+            window.ui = SwaggerUIBundle({
+                url: apiUrl,
+                dom_id: "#swagger-ui",
+                deepLinking: true,
+                presets: [
+                    SwaggerUIBundle.presets.apis,
+                    SwaggerUIStandalonePreset
+                ],
+                layout: "StandaloneLayout"
+            });
+        }
+
+        // Load the first API by default
+        loadSwagger("openapi.yaml");
+    </script>
+</body>
+</html>
