@@ -1,66 +1,65 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Multiple OpenAPI Documentation</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8">
+    <title>API Documentation</title>
+    <script src="redoc.standalone.js"></script>
     <style>
         body {
-            margin: 0;
-            padding: 0;
             display: flex;
+            margin: 0;
+            height: 100vh;
         }
         #sidebar {
-            width: 200px;
-            background-color: #f0f0f0;
-            padding: 10px;
-            overflow-y: auto;
+            width: 250px;
+            background: #f4f4f4;
+            padding: 15px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
         }
-        #sidebar a {
-            display: block;
-            padding: 5px;
+        #sidebar h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        #sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        #sidebar ul li {
+            margin: 10px 0;
+        }
+        #sidebar ul li a {
             text-decoration: none;
             color: #333;
+            font-weight: bold;
+            cursor: pointer;
         }
-        #redoc-container {
+        #content {
             flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
         }
     </style>
 </head>
 <body>
+
     <div id="sidebar">
-        </div>
-    <div id="redoc-container">
-        <redoc id="redoc-content"></redoc>
+        <h2>Available APIs</h2>
+        <ul>
+            <li><a href="#" onclick="loadAPI('openapi.yaml')">API 1</a></li>
+            <li><a href="#" onclick="loadAPI('openapi2.yaml')">API 2</a></li>
+        </ul>
     </div>
 
-    <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>
+    <div id="content">
+        <redoc spec-url="openapi1.yaml"></redoc>
+    </div>
+
     <script>
-        const specs = [
-            { name: "API 1", url: "openapi.yaml" },
-            { name: "API 2", url: "openapi2.yaml" },
-            { name: "API 3", url: "api3.yaml" },
-        ];
-
-        const sidebar = document.getElementById("sidebar");
-        const redocContent = document.getElementById("redoc-content");
-
-        specs.forEach((spec) => {
-            const link = document.createElement("a");
-            link.textContent = spec.name;
-            link.href = "#";
-            link.addEventListener("click", () => {
-                redocContent.setAttribute("spec-url", spec.url);
-                Redoc.init(spec.url, {}, redocContent);
-            });
-            sidebar.appendChild(link);
-        });
-
-        // Load the first API by default
-        if (specs.length > 0) {
-            redocContent.setAttribute("spec-url", specs[0].url);
-            Redoc.init(specs[0].url, {}, redocContent);
+        function loadAPI(apiUrl) {
+            document.getElementById('content').innerHTML = `<redoc spec-url="${apiUrl}"></redoc>`;
+            Redoc.init(apiUrl, {}, document.getElementById('content'));
         }
     </script>
+
 </body>
 </html>
