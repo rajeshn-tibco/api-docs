@@ -16,14 +16,22 @@
         <option value="openapi.yaml">API 1</option>
         <option value="openapi2.yaml">API 2</option>
     </select>
+
     <div id="swagger-ui"></div>
-    <script src="./swagger-ui-bundle.js" charset="UTF-8"> </script>
-    <script src="./swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
+
+    <script src="./swagger-ui-bundle.js" charset="UTF-8"></script>
+    <script src="./swagger-ui-standalone-preset.js" charset="UTF-8"></script>
     <script>
         function loadSwagger(apiUrl) {
             window.ui = SwaggerUIBundle({
                 url: apiUrl,
                 dom_id: "#swagger-ui",
+                deepLinking: true,
+                presets: [
+                    SwaggerUIBundle.presets.apis,
+                    SwaggerUIStandalonePreset // This brings back the banner!
+                ],
+                layout: "StandaloneLayout" // Ensures the banner is visible
             });
         }
 
@@ -34,6 +42,6 @@
         // Load the first API by default
         loadSwagger("openapi.yaml");
     </script>
-	
-  </body>
+</body>
+
 </html>
