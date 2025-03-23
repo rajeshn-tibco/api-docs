@@ -11,14 +11,29 @@
   </head>
 
   <body>
-    <ul>
-        <li><a href="swagger-ui.html?configUrl=openapi.yaml">API 1</a></li>
-        <li><a href="swagger-ui.html?configUrl=openapi2.yaml">API 2</a></li>
-    </ul>
+    <h2>Available APIs</h2>
+    <select id="apiSelector">
+        <option value="openapi.yaml">API 1</option>
+        <option value="openapi2.yaml">API 2</option>
+    </select>
     <div id="swagger-ui"></div>
     <script src="./swagger-ui-bundle.js" charset="UTF-8"> </script>
     <script src="./swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
-    <script src="./swagger-initializer.js" charset="UTF-8"> </script>
+    <script>
+        function loadSwagger(apiUrl) {
+            window.ui = SwaggerUIBundle({
+                url: apiUrl,
+                dom_id: "#swagger-ui",
+            });
+        }
+
+        document.getElementById("apiSelector").addEventListener("change", function() {
+            loadSwagger(this.value);
+        });
+
+        // Load the first API by default
+        loadSwagger("openapi.yaml");
+    </script>
 	
   </body>
 </html>
