@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Multi-API Docs</title>
+  <script src="https://unpkg.com/rapidoc/dist/rapidoc-min.js"></script>
+  <style>
+    select { padding: 8px; margin: 10px; font-size: 16px; }
+  </style>
+</head>
+<body>
+  <select id="api-selector" onchange="loadSpec()">
+    <option value="openapi1.yaml">API 1</option>
+    <option value="openapi2.yaml">API 2</option>
+  </select>
+  <rapi-doc id="rapidoc"></rapi-doc>
+  <script>
+    function loadSpec() {
+      const selectedSpec = document.getElementById('api-selector').value;
+      document.getElementById('rapidoc').setAttribute('spec-url', selectedSpec);
+    }
+    // Load the first spec by default
+    loadSpec();
+  </script>
+</body>
+</html>
