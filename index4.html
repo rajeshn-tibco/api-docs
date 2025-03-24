@@ -22,7 +22,7 @@
     async function loadSpecs() {
       try {
         // For GitHub Pages: List files in 'specs/' using GitHub API
-        const response = await fetch('https://api.github.com/repos/rajeshn-tibco/your-repo/contents/specs');
+        const response = await fetch('https://api.github.com/repos/rajeshn-tibco/api-docs/specs');
         const files = await response.json();
         
         return files
