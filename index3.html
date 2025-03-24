@@ -3,21 +3,41 @@
 <head>
   <title>Multi-API Docs</title>
   <script src="https://unpkg.com/rapidoc/dist/rapidoc-min.js"></script>
-
+  <style>
+    .tab { padding: 10px; cursor: pointer; background: #eee; }
+    .tab.active { background: #ddd; }
+    .content { display: none; }
+    .content.active { display: block; }
+  </style>
 </head>
 <body>
-  <select id="api-selector" onchange="loadSpec()">
-    <option value="openapi.yaml">API 1</option>
-    <option value="openapi2.yaml">API 2</option>
-  </select>
-  <rapi-doc id="rapidoc"></rapi-doc>
+  <div style="display: flex;">
+    <div class="tab active" onclick="showTab('api1')">API 1</div>
+    <div class="tab" onclick="showTab('api2')">API 2</div>
+  </div>
+  
+  <div id="api1" class="content active">
+    <rapi-doc spec-url="openapi.yaml"></rapi-doc>
+  </div>
+  <div id="api2" class="content">
+    <rapi-doc spec-url="openapi2.yaml"></rapi-doc>
+  </div>
+
   <script>
-    function loadSpec() {
-      const selectedSpec = document.getElementById('api-selector').value;
-      document.getElementById('rapidoc').setAttribute('spec-url', selectedSpec);
+    function showTab(tabId) {
+      // Hide all tabs
+      document.querySelectorAll('.content').forEach(el => {
+        el.classList.remove('active');
+      });
+      // Deactivate all tab buttons
+      document.querySelectorAll('.tab').forEach(el => {
+        el.classList.remove('active');
+      });
+      // Show selected tab
+      document.getElementById(tabId).classList.add('active');
+      // Activate clicked tab button
+      event.currentTarget.classList.add('active');
     }
-    // Load the first spec by default
-    loadSpec();
   </script>
 </body>
 </html>
