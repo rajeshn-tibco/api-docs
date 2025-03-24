@@ -1,71 +1,69 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Multi-API Docs</title>
+  <title>API Docs</title>
   <script src="https://unpkg.com/rapidoc/dist/rapidoc-min.js"></script>
   <style>
-    /* Dynamic Tabs Styling */
-    .tabs { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
+    .tabs { display: flex; gap: 5px; margin: 10px 0; flex-wrap: wrap; }
     .tab { 
-      padding: 8px 15px; 
-      background: #eee; 
-      cursor: pointer; 
-      border-radius: 4px; 
+      padding: 8px 15px; background: #eee; cursor: pointer; 
+      border-radius: 4px; font-size: 14px; 
     }
-    .tab:hover { background: #ddd; }
     .tab.active { background: #007BFF; color: white; }
-    #apidoc-container { margin-top: 15px; }
   </style>
 </head>
 <body>
   <h1>API Documentation</h1>
-  <div class="tabs" id="tabs-container">
-    <!-- Tabs will be added here dynamically -->
-  </div>
-  <div id="apidoc-container">
-    <!-- RapiDoc will load here -->
-  </div>
+  <div class="tabs" id="tabs"></div>
+  <div id="apidoc"></div>
 
   <script>
-    // List of OpenAPI specs (auto-detected or manually defined)
-    const specFiles = [
-      { name: "Pet Store", path: "specs/petstore.yaml" },
-      { name: "Weather API", path: "specs/weather.json" },
-      // Add more files as needed (or fetch dynamically)
-    ];
-
-    // Generate tabs dynamically
-    const tabsContainer = document.getElementById('tabs-container');
-    const apidocContainer = document.getElementById('apidoc-container');
-
-    specFiles.forEach((spec, index) => {
-      const tab = document.createElement('div');
-      tab.className = 'tab';
-      tab.textContent = spec.name;
-      tab.onclick = () => loadSpec(spec.path, tab);
-      tabsContainer.appendChild(tab);
-
-      // Load the first spec by default
-      if (index === 0) {
-        loadSpec(spec.path, tab);
+    // Fetch all OpenAPI files from the 'specs/' folder
+    async function loadSpecs() {
+      try {
+        // For GitHub Pages: List files in 'specs/' using GitHub API
+        const response = await fetch('https://api.github.com/repos/rajeshn-tibco/your-repo/contents/specs');
+        const files = await response.json();
+        
+        return files
+          .filter(file => file.name.match(/\.(yaml|yml|json)$/i))
+          .map(file => ({
+            name: file.name.replace(/\.[^/.]+$/, ""), // Remove extension
+            path: `specs/${file.name}`                // Relative path
+          }));
+      } catch (error) {
+        // Fallback: Manually list files if API fails (e.g., local testing)
+        console.error("GitHub API failed, using fallback:", error);
+        return [
+          { name: "Pet Store", path: "specs/petstore.yaml" },
+          { name: "Weather API", path: "specs/weather.json" }
+        ];
       }
-    });
-
-    // Load the selected spec
-    function loadSpec(specUrl, clickedTab) {
-      // Highlight active tab
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      clickedTab.classList.add('active');
-
-      // Clear previous doc and load new one
-      apidocContainer.innerHTML = `
-        <rapi-doc 
-          spec-url="${specUrl}" 
-          theme="light" 
-          render-style="read"
-        ></rapi-doc>
-      `;
     }
+
+    // Render tabs and load first spec
+    async function init() {
+      const specs = await loadSpecs();
+      const tabsContainer = document.getElementById('tabs');
+      const apidocContainer = document.getElementById('apidoc');
+
+      specs.forEach((spec, index) => {
+        const tab = document.createElement('div');
+        tab.className = 'tab';
+        tab.textContent = spec.name;
+        tab.onclick = () => {
+          document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          apidocContainer.innerHTML = `<rapi-doc spec-url="${spec.path}"></rapi-doc>`;
+        };
+        tabsContainer.appendChild(tab);
+
+        // Load first spec by default
+        if (index === 0) tab.click();
+      });
+    }
+
+    init();
   </script>
 </body>
 </html>
